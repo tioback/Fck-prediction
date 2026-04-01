@@ -19,7 +19,7 @@ DIRECTORIES = [
 
 # ── Data constants ────────────────────────────────────────────────────────────
 
-DATA_FILE    = "Concrete_Data.xls"
+DATA_FILE    = "data/Concrete_Data.xls"
 COLUMN_NAMES = ['C', 'S', 'FA', 'SF', 'LP', 'W', 'SP', 'Gravel', 'Sand', 'Age', 'fck']
 TARGET       = 'fck'
 RANDOM_SEED  = 42
