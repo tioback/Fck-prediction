@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import shap
 
+from fck_prediction.config import FIG_SHAP, RES_SHAP
+
 
 def run_shap(models_trained, model_list, X_tst_ref_sc, feature_names):
     """SHAP feature importance for all trained models (S15).
@@ -76,7 +78,7 @@ def run_shap(models_trained, model_list, X_tst_ref_sc, feature_names):
                 imp_df['Model'] = model_name
                 all_shap_importance.append(imp_df)
                 imp_df.to_excel(
-                    f"Paper/Results/SHAP_Results/SHAP_Importance_{model_name}_Otimizado.xlsx",
+                    RES_SHAP / f"SHAP_Importance_{model_name}_Otimizado.xlsx",
                     index=False)
 
                 plt.figure(figsize=(10, 6))
@@ -85,18 +87,14 @@ def run_shap(models_trained, model_list, X_tst_ref_sc, feature_names):
                 plt.title(f'SHAP Feature Importance – {model_name}')
                 plt.gca().invert_yaxis()
                 plt.tight_layout()
-                plt.savefig(f"Figuras_Shap/SHAP_Bar_{model_name}_Otimizado.png",
-                            dpi=300, bbox_inches='tight')
-                plt.savefig(f"Paper/Figures/SHAP_Bar_{model_name}_Otimizado.png",
+                plt.savefig(FIG_SHAP / f"SHAP_Bar_{model_name}_Otimizado.png",
                             dpi=300, bbox_inches='tight')
                 plt.close()
 
                 plt.figure(figsize=(10, 6))
                 shap.summary_plot(shap_vals, X_used, feature_names=feature_names, show=False)
                 plt.tight_layout()
-                plt.savefig(f"Figuras_Shap/SHAP_Summary_{model_name}_Otimizado.png",
-                            dpi=300, bbox_inches='tight')
-                plt.savefig(f"Paper/Figures/SHAP_Summary_{model_name}_Otimizado.png",
+                plt.savefig(FIG_SHAP / f"SHAP_Summary_{model_name}_Otimizado.png",
                             dpi=300, bbox_inches='tight')
                 plt.close()
 
@@ -108,7 +106,7 @@ def run_shap(models_trained, model_list, X_tst_ref_sc, feature_names):
                                                  feature_names=feature_names, show=False)
                             plt.tight_layout()
                             plt.savefig(
-                                f"Figuras_Shap/SHAP_Dependence_{model_name}_{feat}_Otimizado.png",
+                                FIG_SHAP / f"SHAP_Dependence_{model_name}_{feat}_Otimizado.png",
                                 dpi=300, bbox_inches='tight')
                             plt.close()
                         except Exception:
@@ -121,24 +119,20 @@ def run_shap(models_trained, model_list, X_tst_ref_sc, feature_names):
     if all_shap_importance:
         cons_shap = pd.concat(all_shap_importance, ignore_index=True)
         cons_shap.to_excel(
-            "Paper/Results/SHAP_Results/SHAP_Importance_ALL_MODELS_Otimizado.xlsx",
+            RES_SHAP / "SHAP_Importance_ALL_MODELS_Otimizado.xlsx",
             index=False)
         piv_shap      = cons_shap.pivot_table(
             values='SHAP_Importance', index='Feature', columns='Model', fill_value=0)
         piv_shap_norm = piv_shap.div(piv_shap.sum(axis=0), axis=1)
-        piv_shap.to_excel(
-            "Paper/Results/SHAP_Results/SHAP_Importance_Pivot_Otimizado.xlsx")
-        piv_shap_norm.to_excel(
-            "Paper/Results/SHAP_Results/SHAP_Importance_Pivot_Normalized_Otimizado.xlsx")
+        piv_shap.to_excel(RES_SHAP / "SHAP_Importance_Pivot_Otimizado.xlsx")
+        piv_shap_norm.to_excel(RES_SHAP / "SHAP_Importance_Pivot_Normalized_Otimizado.xlsx")
 
         plt.figure(figsize=(14, 10))
         import seaborn as sns
         sns.heatmap(piv_shap_norm, annot=True, fmt='.3f', cmap='viridis')
         plt.title('Normalized SHAP Importance – All Models', fontsize=14)
         plt.tight_layout()
-        plt.savefig("Figuras_Shap/SHAP_Importance_Heatmap_Otimizado.png",
-                    dpi=300, bbox_inches='tight')
-        plt.savefig("Paper/Figures/SHAP_Importance_Heatmap_Otimizado.png",
+        plt.savefig(FIG_SHAP / "SHAP_Importance_Heatmap_Otimizado.png",
                     dpi=300, bbox_inches='tight')
         plt.close()
         print(f"✅ SHAP consolidado para {len(all_shap_importance)} modelos")

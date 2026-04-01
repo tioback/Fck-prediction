@@ -1,6 +1,8 @@
 import pandas as pd
 from sklearn.preprocessing import StandardScaler
 
+from fck_prediction.config import RESULTS_DIR
+
 
 def predict_new_mixes(models_trained, scalers, X_full, feature_names):
     """Apply trained models to 18 hardcoded new concrete mix recipes (S19).
@@ -42,7 +44,7 @@ def predict_new_mixes(models_trained, scalers, X_full, feature_names):
     pred_nd = pd.DataFrame(predicoes)
     pred_nd.insert(0, "Mix_ID", range(1, len(novas) + 1))
     pred_nd["Best_Model"] = pred_nd.drop(columns="Mix_ID").idxmax(axis=1)
-    pred_nd.to_excel("Paper/Results/predicoes_novas_dosagens_otimizado.xlsx", index=False)
+    pred_nd.to_excel(RESULTS_DIR / "predicoes_novas_dosagens_otimizado.xlsx", index=False)
     print("✅ Predições para novas dosagens salvas")
 
     return pred_nd

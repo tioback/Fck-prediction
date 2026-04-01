@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 from sklearn.base import clone
 from sklearn.inspection import PartialDependenceDisplay, partial_dependence
 
-from fck_prediction.config import (N_GRID_PDP, TARGET)
+from fck_prediction.config import (N_GRID_PDP, TARGET, FIG_PDP, RESULTS_DIR)
 
 
 def run_pdp(models_trained, optimized_datasets, feature_names, ranking,
@@ -68,11 +68,7 @@ def run_pdp(models_trained, optimized_datasets, feature_names, ranking,
                     ax.set_ylabel('Partial Dependence (fck MPa)', fontsize=10)
                     ax.grid(True, alpha=0.3)
             plt.tight_layout()
-            for pth in ['Figuras_PDP/PDP_Best_Model.png',
-                        'Figuras_Shap/PDP_Best_Model.png',
-                        'Paper/Figures/PDP_Best_Model.png',
-                        'Figures/PDP_Best_Model.png']:
-                plt.savefig(pth, dpi=300, bbox_inches='tight')
+            plt.savefig(FIG_PDP / 'PDP_Best_Model.png', dpi=300, bbox_inches='tight')
             plt.close()
             print("   ✅ PDP melhor modelo salvo")
         except Exception as e:
@@ -101,11 +97,7 @@ def run_pdp(models_trained, optimized_datasets, feature_names, ranking,
             except Exception as e:
                 print(f"   ⚠️ PDP {mname}: {str(e)[:80]}")
         plt.tight_layout()
-        for pth in ['Figuras_PDP/PDP_Top3_Models.png',
-                    'Figuras_Shap/PDP_Top3_Models.png',
-                    'Paper/Figures/PDP_Top3_Models.png',
-                    'Figures/PDP_Top3_Models.png']:
-            plt.savefig(pth, dpi=300, bbox_inches='tight')
+        plt.savefig(FIG_PDP / 'PDP_Top3_Models.png', dpi=300, bbox_inches='tight')
         plt.close()
         print("   ✅ PDP Top 3 salvo")
 
@@ -139,11 +131,7 @@ def run_pdp(models_trained, optimized_datasets, feature_names, ranking,
         ax.grid(True, alpha=0.3)
         ax.legend(loc='best', fontsize=8)
     plt.tight_layout()
-    for pth in ['Figuras_PDP/PDP_All_Models_Comparison.png',
-                'Figuras_Shap/PDP_All_Models_Comparison.png',
-                'Paper/Figures/PDP_All_Models_Comparison.png',
-                'Figures/PDP_All_Models_Comparison.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_PDP / 'PDP_All_Models_Comparison.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("   ✅ PDP comparativo (todos os modelos) salvo")
 
@@ -171,11 +159,7 @@ def run_pdp(models_trained, optimized_datasets, feature_names, ranking,
             except Exception as e:
                 print(f"   ⚠️ PDP 2D: {str(e)[:80]}")
         plt.tight_layout()
-        for pth in ['Figuras_PDP/PDP_2D_Interaction.png',
-                    'Figuras_Shap/PDP_2D_Interaction.png',
-                    'Paper/Figures/PDP_2D_Interaction.png',
-                    'Figures/PDP_2D_Interaction.png']:
-            plt.savefig(pth, dpi=300, bbox_inches='tight')
+        plt.savefig(FIG_PDP / 'PDP_2D_Interaction.png', dpi=300, bbox_inches='tight')
         plt.close()
         print("   ✅ PDP 2D salvo")
 
@@ -184,6 +168,5 @@ def run_pdp(models_trained, optimized_datasets, feature_names, ranking,
         {'Model': mn, 'PDP_Computed': 'Yes', 'N_Features': len(feature_names),
          'Best_Model': 'Yes' if mn == best_pdp else 'No'}
         for mn in pdp_models])
-    pdp_summary_tbl.to_excel('Resultados_Artigo/PDP_Summary.xlsx', index=False)
-    pdp_summary_tbl.to_excel('Paper/Results/PDP_Summary.xlsx',    index=False)
+    pdp_summary_tbl.to_excel(RESULTS_DIR / 'PDP_Summary.xlsx', index=False)
     print("\n✅ Partial Dependence Plots concluído!")

@@ -7,7 +7,7 @@ from sklearn.metrics import (r2_score, mean_squared_error,
                              mean_absolute_error,
                              mean_absolute_percentage_error)
 
-from fck_prediction.config import TARGET
+from fck_prediction.config import TARGET, RESULTS_DIR
 
 
 def train_models(X_full, y_full, models, optimized_datasets,
@@ -120,7 +120,7 @@ def train_models(X_full, y_full, models, optimized_datasets,
             print(f"   ❌ Erro: {str(e)[:100]}")
 
     results_df = pd.DataFrame(results)
-    results_df.to_excel('Resultados_Artigo/Results_Otimizado.xlsx', index=False)
+    results_df.to_excel(RESULTS_DIR / 'Results_Otimizado.xlsx', index=False)
     print("\n📈 RESUMO (TESTE):")
     print(results_df.sort_values('R2', ascending=False))
 

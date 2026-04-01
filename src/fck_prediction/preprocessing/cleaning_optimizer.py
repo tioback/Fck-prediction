@@ -5,7 +5,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import r2_score
 
-from fck_prediction.config import TARGET, N_CLEAN_RUNS
+from fck_prediction.config import TARGET, N_CLEAN_RUNS, DATASETS_DIR, RESULTS_DIR
 
 
 def optimize_cleaning(X_full, y_full, models, model_list, cleaning_methods, feature_names,
@@ -113,7 +113,7 @@ def optimize_cleaning(X_full, y_full, models, model_list, cleaning_methods, feat
                 'y_tst_raw': y_tst_raw_f,
             }
             opt_df.to_excel(
-                f"Bancos_Otimizados/Dataset_Otimizado_{model_name}.xlsx",
+                DATASETS_DIR / f"Dataset_Otimizado_{model_name}.xlsx",
                 index=False)
             print(f"      📁 Dev otimizado salvo: {len(opt_df)} amostras")
 
@@ -136,7 +136,7 @@ def optimize_cleaning(X_full, y_full, models, model_list, cleaning_methods, feat
     opt_summary_full = pd.DataFrame(optimization_results)
     if not opt_summary_full.empty:
         opt_summary_full.to_excel(
-            'Resultados_Artigo/Otimizacao_Limpeza_Resultados.xlsx', index=False)
+            RESULTS_DIR / 'Otimizacao_Limpeza_Resultados.xlsx', index=False)
 
     best_opt_summary = pd.DataFrame([
         {'Model':       m,
@@ -145,7 +145,7 @@ def optimize_cleaning(X_full, y_full, models, model_list, cleaning_methods, feat
         for m in model_list
     ])
     best_opt_summary.to_excel(
-        'Resultados_Artigo/Melhor_Metodo_Limpeza_por_Modelo.xlsx', index=False)
+        RESULTS_DIR / 'Melhor_Metodo_Limpeza_por_Modelo.xlsx', index=False)
 
     print("\n📊 RESUMO DA OTIMIZAÇÃO:")
     print(best_opt_summary.to_string(index=False))

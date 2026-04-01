@@ -5,7 +5,7 @@ import seaborn as sns
 from sklearn.base import clone
 from sklearn.inspection import permutation_importance
 
-from fck_prediction.config import (N_REPEATS_PERM, TARGET)
+from fck_prediction.config import (N_REPEATS_PERM, TARGET, FIG_PERM_IMP, RES_SHAP, RESULTS_DIR)
 
 
 def run_permutation_importance(models_trained, optimized_datasets, feature_names,
@@ -70,9 +70,7 @@ def run_permutation_importance(models_trained, optimized_datasets, feature_names
                 'Top_3_Importance':imp_df.iloc[2]['Importance'] if len(imp_df) > 2 else 0,
             })
 
-            for pth in [f"Paper/Results/SHAP_Results/Permutation_Importance_{model_name}.xlsx",
-                        f"Resultados_Artigo/Permutation_Importance_{model_name}.xlsx"]:
-                imp_df.to_excel(pth, index=False)
+            imp_df.to_excel(RES_SHAP / f"Permutation_Importance_{model_name}.xlsx", index=False)
 
             print(f"      ✅ Top: {imp_df.iloc[0]['Feature']} ({imp_df.iloc[0]['Importance']:.4f})")
         except Exception as e:
@@ -92,10 +90,7 @@ def run_permutation_importance(models_trained, optimized_datasets, feature_names
     plt.xlabel('Features', fontsize=12); plt.ylabel('Model', fontsize=12)
     plt.xticks(rotation=45, ha='right')
     plt.tight_layout()
-    for pth in ['Figuras_PermutationImportance/Permutation_Importance_Heatmap.png',
-                'Figuras_Shap/Permutation_Importance_Heatmap.png',
-                'Paper/Figures/Permutation_Importance_Heatmap.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_PERM_IMP / 'Permutation_Importance_Heatmap.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("\n✅ Heatmap Permutation Importance salvo")
 
@@ -127,10 +122,7 @@ def run_permutation_importance(models_trained, optimized_datasets, feature_names
     for idx in range(pidx2 + 1, len(ax_flat)):
         ax_flat[idx].set_visible(False)
     plt.tight_layout()
-    for pth in ['Figuras_PermutationImportance/Permutation_Importance_Bars.png',
-                'Figuras_Shap/Permutation_Importance_Bars.png',
-                'Paper/Figures/Permutation_Importance_Bars.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_PERM_IMP / 'Permutation_Importance_Bars.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Barras Permutation Importance salvas")
 
@@ -160,10 +152,7 @@ def run_permutation_importance(models_trained, optimized_datasets, feature_names
             ax.set_ylabel('Norm. Importance', fontsize=10)
             ax.legend(fontsize=9); ax.grid(True, alpha=0.3, axis='y')
         plt.tight_layout()
-        for pth in ['Figuras_PermutationImportance/SHAP_vs_Permutation_Importance.png',
-                    'Figuras_Shap/SHAP_vs_Permutation_Importance.png',
-                    'Paper/Figures/SHAP_vs_Permutation_Importance.png']:
-            plt.savefig(pth, dpi=300, bbox_inches='tight')
+        plt.savefig(FIG_PERM_IMP / 'SHAP_vs_Permutation_Importance.png', dpi=300, bbox_inches='tight')
         plt.close()
         print("✅ SHAP vs Permutation Importance salvo")
 
@@ -187,10 +176,7 @@ def run_permutation_importance(models_trained, optimized_datasets, feature_names
     ax.tick_params(axis='x', rotation=45, labelsize=10)
     ax.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
-    for pth in ['Figuras_PermutationImportance/Permutation_Importance_Boxplot.png',
-                'Figuras_Shap/Permutation_Importance_Boxplot.png',
-                'Paper/Figures/Permutation_Importance_Boxplot.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_PERM_IMP / 'Permutation_Importance_Boxplot.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Boxplot Permutation Importance salvo")
 
@@ -203,14 +189,10 @@ def run_permutation_importance(models_trained, optimized_datasets, feature_names
                                pd_data['importances_mean'],
                                pd_data['importances_std'])
     ])
-    cons_perm.to_excel('Resultados_Artigo/Permutation_Importance_Consolidated.xlsx', index=False)
-    cons_perm.to_excel('Paper/Results/Permutation_Importance_Consolidated.xlsx',    index=False)
+    cons_perm.to_excel(RESULTS_DIR / 'Permutation_Importance_Consolidated.xlsx', index=False)
     cons_perm.pivot_table(values='Importance', index='Model',
                           columns='Feature', fill_value=0).to_excel(
-        'Resultados_Artigo/Permutation_Importance_Pivot.xlsx')
-    cons_perm.pivot_table(values='Importance', index='Model',
-                          columns='Feature', fill_value=0).to_excel(
-        'Paper/Results/Permutation_Importance_Pivot.xlsx')
+        RESULTS_DIR / 'Permutation_Importance_Pivot.xlsx')
 
     feat_stats_perm = []
     for f in feature_names:
@@ -225,8 +207,7 @@ def run_permutation_importance(models_trained, optimized_datasets, feature_names
         })
     feat_stats_perm_df = pd.DataFrame(feat_stats_perm).sort_values(
         'Mean_Importance', ascending=False)
-    feat_stats_perm_df.to_excel('Resultados_Artigo/Permutation_Importance_Feature_Stats.xlsx', index=False)
-    feat_stats_perm_df.to_excel('Paper/Results/Permutation_Importance_Feature_Stats.xlsx',    index=False)
+    feat_stats_perm_df.to_excel(RESULTS_DIR / 'Permutation_Importance_Feature_Stats.xlsx', index=False)
 
     print("\n📊 TOP 3 FEATURES POR MODELO:")
     print(pd.DataFrame(perm_imp_summary).to_string(index=False))
