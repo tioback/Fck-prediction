@@ -26,18 +26,18 @@ Reference: ARCHITECTURE.md (section codes S00–S30).
 ## Status
 
 - [x] ROADMAP.md
-- [ ] Commit 1 — scaffold
-- [ ] Commit 2 — config
-- [ ] Commit 3 — data
-- [ ] Commit 4 — models
-- [ ] Commit 5 — preprocessing
-- [ ] Commit 6 — training
-- [ ] Commit 7 — monte carlo
-- [ ] Commit 8 — picp
-- [ ] Commit 9 — cross validation
-- [ ] Commit 10 — visualization
-- [ ] Commit 11 — evaluation (ranking/stats)
-- [ ] Commit 12 — evaluation (diagnostics)
-- [ ] Commit 13 — interpretation
-- [ ] Commit 14 — inference
-- [ ] Commit 15 — cli
+- [x] Commit 1 — scaffold
+- [x] Commit 2 — config
+- [x] Commit 3 — data
+- [x] Commit 4 — models
+- [x] Commit 5 — preprocessing
+- [x] Commit 6 — training
+- [x] Commit 7 — monte carlo
+- [x] Commit 8 — picp
+- [x] Commit 9 — cross validation
+- [x] Commit 10 — visualization
+- [x] Commit 11 — evaluation (ranking/stats)
+- [x] Commit 12 — evaluation (diagnostics)
+- [x] Commit 13 — interpretation
+- [x] Commit 14 — inference
+- [x] Commit 15 — cli
