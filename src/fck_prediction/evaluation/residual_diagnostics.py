@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from fck_prediction.config import FIG_RESIDUAL_DIAG, RESULTS_DIR
+
 
 def run_residual_diagnostics(pred_ref, y_ref_ext):
     """Econometric residual diagnostics on the common reference partition (S18).
@@ -48,15 +50,15 @@ def run_residual_diagnostics(pred_ref, y_ref_ext):
         sm.graphics.tsa.plot_pacf(res, lags=20, ax=ax[1])
         ax[1].set_title(f"PACF – {name}")
         plt.tight_layout()
-        plt.savefig(f"Paper/Residual_Diagnostics/ACF_PACF_{name}_Otimizado.png", dpi=300)
+        plt.savefig(FIG_RESIDUAL_DIAG / f"ACF_PACF_{name}_Otimizado.png", dpi=300)
         plt.close()
 
     diag_df = pd.DataFrame(diagnostics).sort_values("ShapiroFrancia_p", ascending=False)
     print("\n📊 RESIDUAL DIAGNOSTICS:")
     print(diag_df[['Model', 'ShapiroFrancia_p', 'JarqueBera_p',
                    'BreuschPagan_p', 'White_p', 'DurbinWatson']].to_string(index=False))
-    diag_df.to_csv("Paper/Results/residual_diagnostics_full_otimizado.csv", index=False)
-    diag_df.to_excel("Paper/Results/residual_diagnostics_full_otimizado.xlsx", index=False)
+    diag_df.to_csv(RESULTS_DIR / "residual_diagnostics_full_otimizado.csv", index=False)
+    diag_df.to_excel(RESULTS_DIR / "residual_diagnostics_full_otimizado.xlsx", index=False)
     print("✅ Residual diagnostics concluído")
 
     # ── Heteroscedasticity chart ──────────────────────────────────────────────
@@ -85,7 +87,7 @@ def run_residual_diagnostics(pred_ref, y_ref_ext):
     plt.suptitle('Heteroscedasticity Tests (Common Test Set)',
                  fontsize=14, fontweight='bold')
     plt.tight_layout()
-    plt.savefig('Paper/Figures/heterocedasticidade_pvalues_otimizado.png',
+    plt.savefig(FIG_RESIDUAL_DIAG / 'heterocedasticidade_pvalues_otimizado.png',
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Gráfico heterocedasticidade salvo")

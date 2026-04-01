@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from fck_prediction.config import RES_MCS, FIGURES_DIR
+
 
 def compute_mcs(pred_ref, y_ref_ext):
     """Greedy Model Confidence Set: iteratively eliminate worst model (S22).
@@ -41,7 +43,7 @@ def compute_mcs(pred_ref, y_ref_ext):
         'Mean_Loss':   loss_arr.mean(axis=1),
         'In_Final_MCS': ['Yes' if m in mcs_names else 'No' for m in nms_mcs],
     }).sort_values('Mean_Loss')
-    mcs_res.to_excel("Paper/Results/model_confidence_set_otimizado.xlsx", index=False)
+    mcs_res.to_excel(RES_MCS / "model_confidence_set_otimizado.xlsx", index=False)
 
     plt.figure(figsize=(10, 6))
     cols_mcs = ['green' if x == 'Yes' else 'red' for x in mcs_res['In_Final_MCS']]
@@ -54,7 +56,7 @@ def compute_mcs(pred_ref, y_ref_ext):
                 color='blue', linestyle='--', label='MCS threshold')
     plt.legend()
     plt.tight_layout()
-    plt.savefig("Paper/Figures/model_confidence_set_otimizado.png",
+    plt.savefig(FIGURES_DIR / "model_confidence_set_otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ MCS salvo")

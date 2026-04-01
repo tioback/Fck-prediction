@@ -3,7 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from fck_prediction.config import (TARGET, CONFIDENCE_LEVELS, Z_SCORES_MAP)
+from fck_prediction.config import (TARGET, CONFIDENCE_LEVELS, Z_SCORES_MAP,
+                                    FIG_PICP, RESULTS_DIR)
 
 
 def run_picp(models_trained, optimized_datasets, feature_names):
@@ -79,8 +80,7 @@ def run_picp(models_trained, optimized_datasets, feature_names):
 
     if picp_results:
         picp_df = pd.DataFrame(picp_results)
-        picp_df.to_excel('Resultados_Artigo/PICP_Results_Otimizado.xlsx', index=False)
-        picp_df.to_excel('Paper/Results/PICP_Results_Otimizado.xlsx',     index=False)
+        picp_df.to_excel(RESULTS_DIR / "PICP_Results_Otimizado.xlsx", index=False)
         print(f"\n✅ PICP concluído para {len(picp_df['Model'].unique())} modelos")
     else:
         picp_df = pd.DataFrame()
@@ -104,8 +104,7 @@ def run_picp(models_trained, optimized_datasets, feature_names):
                                 ax=ax, vmin=0, vmax=1)
                     ax.set_title(method.replace('_', ' '), fontsize=12, fontweight='bold')
         plt.tight_layout()
-        plt.savefig('Figures/PICP_Heatmap_Comparison.png', dpi=300, bbox_inches='tight')
-        plt.savefig('Paper/Figures/PICP_Heatmap_Comparison.png', dpi=300, bbox_inches='tight')
+        plt.savefig(FIG_PICP / "PICP_Heatmap_Comparison.png", dpi=300, bbox_inches='tight')
         plt.close()
         print("✅ PICP Heatmap salvo")
 
@@ -127,8 +126,7 @@ def run_picp(models_trained, optimized_datasets, feature_names):
             ax.legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=9)
             ax.set_xlim(0.6, 1); ax.set_ylim(0.6, 1)
         plt.tight_layout()
-        plt.savefig('Figures/PICP_Calibration_Curves.png', dpi=300, bbox_inches='tight')
-        plt.savefig('Paper/Figures/PICP_Calibration_Curves.png', dpi=300, bbox_inches='tight')
+        plt.savefig(FIG_PICP / "PICP_Calibration_Curves.png", dpi=300, bbox_inches='tight')
         plt.close()
         print("✅ Curvas de calibração PICP salvas")
 
@@ -149,8 +147,7 @@ def run_picp(models_trained, optimized_datasets, feature_names):
                 picp_tbl[f'Width_{pfx}'] = pv_wid[col].values
         picp_tbl = picp_tbl.sort_values('PICP_Gaussian', ascending=False,
                                          na_position='last')
-        picp_tbl.to_excel('Paper/Results/PICP_Summary_Table.xlsx', index=False)
-        picp_tbl.to_excel('Resultados_Artigo/PICP_Summary_Table.xlsx', index=False)
+        picp_tbl.to_excel(RESULTS_DIR / "PICP_Summary_Table.xlsx", index=False)
         print("\n📊 Tabela PICP 95%:")
         print(picp_tbl.to_string(index=False))
 

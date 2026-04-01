@@ -40,3 +40,6 @@ legacy_summary.txt
 
 # Local History
 .history/
+
+# Generated outputs
+outputs/

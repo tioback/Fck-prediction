@@ -5,6 +5,8 @@ from scipy import stats
 from scipy.special import softmax
 from scipy.stats import rankdata
 
+from fck_prediction.config import FIG_DM_HEATMAP, FIGURES_DIR, RESULTS_DIR
+
 
 def run_dm_heatmap(pred_ref, y_ref_ext):
     """Pairwise Diebold-Mariano heatmap on squared errors (S14).
@@ -32,8 +34,7 @@ def run_dm_heatmap(pred_ref, y_ref_ext):
             dm_res.append([nms_dm[i], nms_dm[j], dm, p])
 
     dm_df = pd.DataFrame(dm_res, columns=["Model1", "Model2", "DM", "p"])
-    dm_df.to_excel('Resultados_Artigo/DM_Heatmap_Results_Otimizado.xlsx', index=False)
-    dm_df.to_excel('Paper/Results/DM_Heatmap_Results_Otimizado.xlsx',    index=False)
+    dm_df.to_excel(RESULTS_DIR / 'DM_Heatmap_Results_Otimizado.xlsx', index=False)
 
     dm_pivot = dm_df.pivot(index="Model1", columns="Model2", values="DM")
     plt.figure(figsize=(10, 8))
@@ -43,9 +44,7 @@ def run_dm_heatmap(pred_ref, y_ref_ext):
                 cbar_kws={'label': 'DM Statistic'})
     plt.title('Diebold-Mariano Test Heatmap (Common Test Set)', fontsize=14)
     plt.tight_layout()
-    plt.savefig('Figuras_DM_Heatmap/DM_Heatmap_Otimizado.png',
-                dpi=300, bbox_inches='tight')
-    plt.savefig('Paper/Figures/DM_Heatmap_Otimizado.png',
+    plt.savefig(FIG_DM_HEATMAP / 'DM_Heatmap_Otimizado.png',
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ DM Heatmap salvo")
@@ -99,12 +98,12 @@ def run_friedman_nemenyi(df_results):
     plt.axvline(mr.mean() - cd / 2, color='g', linestyle='--', alpha=0.7)
     plt.legend()
     plt.tight_layout()
-    plt.savefig("Paper/Figures/cd_diagram_nemenyi.png", dpi=300, bbox_inches='tight')
+    plt.savefig(FIGURES_DIR / "cd_diagram_nemenyi.png", dpi=300, bbox_inches='tight')
     plt.close()
 
     fr_df = pd.DataFrame({'Model': ml, 'Mean_Rank': mr,
                           'Friedman_p': p_fr}).sort_values('Mean_Rank')
-    fr_df.to_excel("Paper/Results/friedman_nemenyi_ranks.xlsx", index=False)
+    fr_df.to_excel(RESULTS_DIR / "friedman_nemenyi_ranks.xlsx", index=False)
     print("🏆 TOP 5:"); print(fr_df.head())
     print("✅ CD Diagram salvo")
 
@@ -135,7 +134,7 @@ def run_dm_test(pred_ref, y_ref_ext):
             dm_tab.append([nms[i], nms[j], dm, p])
 
     dm_out = pd.DataFrame(dm_tab, columns=["Model1", "Model2", "DM", "p"])
-    dm_out.to_excel("Paper/Results/diebold_mariano_otimizado.xlsx", index=False)
+    dm_out.to_excel(RESULTS_DIR / "diebold_mariano_otimizado.xlsx", index=False)
     print("✅ Diebold-Mariano salvo")
 
     return dm_out
@@ -157,7 +156,7 @@ def run_plackett_luce(pred_ref, y_ref_ext):
     abilities = softmax(-np.array(rmse_pl))
     pl_df = pd.DataFrame({"Model": nms_pl, "Ability": abilities}).sort_values(
         "Ability", ascending=False)
-    pl_df.to_excel("Paper/Results/plackett_luce_ranking_otimizado.xlsx", index=False)
+    pl_df.to_excel(RESULTS_DIR / "plackett_luce_ranking_otimizado.xlsx", index=False)
     print("✅ Plackett-Luce ranking salvo")
     print(pl_df.to_string(index=False))
 

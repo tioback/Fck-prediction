@@ -4,7 +4,8 @@ import matplotlib.pyplot as plt
 from sklearn.base import clone
 from sklearn.model_selection import learning_curve
 
-from fck_prediction.config import (N_GRID_LC, CV_FOLDS_LC, TARGET)
+from fck_prediction.config import (N_GRID_LC, CV_FOLDS_LC, TARGET,
+                                    FIG_LEARNING_CURVES, RESULTS_DIR)
 
 
 def run_learning_curves(models_trained, optimized_datasets, feature_names,
@@ -95,11 +96,8 @@ def run_learning_curves(models_trained, optimized_datasets, feature_names,
     for idx in range(pidx, len(axes_flat)):
         axes_flat[idx].set_visible(False)
     plt.tight_layout()
-    for pth in ['Figuras_LearningCurves/Learning_Curves_All_Models.png',
-                'Figuras_NestedCV/Learning_Curves_All_Models.png',
-                'Paper/Figures/Learning_Curves_All_Models.png',
-                'Figures/Learning_Curves_All_Models.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_LEARNING_CURVES / 'Learning_Curves_All_Models.png',
+                dpi=300, bbox_inches='tight')
     plt.close()
     print("\n✅ Learning Curves (todos os modelos) salvo")
 
@@ -126,11 +124,8 @@ def run_learning_curves(models_trained, optimized_datasets, feature_names,
     ax.legend(loc='upper right', fontsize=10)
     ax.grid(True, alpha=0.3, axis='y'); ax.set_ylim(0, 1.1)
     plt.tight_layout()
-    for pth in ['Figuras_LearningCurves/Learning_Curves_Gap_Comparison.png',
-                'Figuras_NestedCV/Learning_Curves_Gap_Comparison.png',
-                'Paper/Figures/Learning_Curves_Gap_Comparison.png',
-                'Figures/Learning_Curves_Gap_Comparison.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_LEARNING_CURVES / 'Learning_Curves_Gap_Comparison.png',
+                dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Gap Comparison salvo")
 
@@ -165,11 +160,8 @@ def run_learning_curves(models_trained, optimized_datasets, feature_names,
             ax.legend(loc='lower right', fontsize=8)
             ax.grid(True, alpha=0.3); ax.set_ylim(-0.1, 1.05)
     plt.tight_layout()
-    for pth in ['Figuras_LearningCurves/Learning_Curves_Best_vs_Worst.png',
-                'Figuras_NestedCV/Learning_Curves_Best_vs_Worst.png',
-                'Paper/Figures/Learning_Curves_Best_vs_Worst.png',
-                'Figures/Learning_Curves_Best_vs_Worst.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_LEARNING_CURVES / 'Learning_Curves_Best_vs_Worst.png',
+                dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Best vs Worst Learning Curves salvo")
 
@@ -202,8 +194,7 @@ def run_learning_curves(models_trained, optimized_datasets, feature_names,
                         'Samples':           len(optimized_datasets[mname]['dev_df'])})
 
     diag_lc_df = pd.DataFrame(diag_lc).sort_values('Final_Test_Score', ascending=False)
-    diag_lc_df.to_excel('Resultados_Artigo/Learning_Curves_Diagnosis.xlsx', index=False)
-    diag_lc_df.to_excel('Paper/Results/Learning_Curves_Diagnosis.xlsx',    index=False)
+    diag_lc_df.to_excel(RESULTS_DIR / 'Learning_Curves_Diagnosis.xlsx', index=False)
     print("\n📊 DIAGNÓSTICO LEARNING CURVES:")
     print(diag_lc_df[['Model', 'Final_Test_Score', 'Final_Gap', 'Status']].to_string(index=False))
 

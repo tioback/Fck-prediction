@@ -1,5 +1,7 @@
 import pandas as pd
 
+from fck_prediction.config import RESULTS_DIR
+
 
 def compute_summary_stats(results_df):
     """Descriptive stats table per model per metric (S17).
@@ -27,12 +29,12 @@ def compute_summary_stats(results_df):
         if stats_summ:
             st_df = pd.DataFrame(stats_summ)
             st_df.to_excel(
-                'Resultados_Artigo/Boxplot_Statistics_Detailed_Otimizado.xlsx',
+                RESULTS_DIR / 'Boxplot_Statistics_Detailed_Otimizado.xlsx',
                 index=False)
             st_df.pivot_table(values='Mean', index='Model', columns='Metric').to_excel(
-                'Resultados_Artigo/Boxplot_Means_Otimizado.xlsx')
+                RESULTS_DIR / 'Boxplot_Means_Otimizado.xlsx')
             st_df.pivot_table(values='Std',  index='Model', columns='Metric').to_excel(
-                'Resultados_Artigo/Boxplot_Stds_Otimizado.xlsx')
+                RESULTS_DIR / 'Boxplot_Stds_Otimizado.xlsx')
             print("✅ Tabelas de estatísticas salvas")
     except Exception as e:
         print(f"   ❌ {e}")

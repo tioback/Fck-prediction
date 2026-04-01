@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from fck_prediction.config import FIG_IFI, RESULTS_DIR
+
 
 def compute_ifi(results_df):
     """Entropy-weighted IFI composite score — rank all models (S12).
@@ -26,7 +28,7 @@ def compute_ifi(results_df):
     weights = div / div.sum()
     results_df["IFI"] = (X_mat * weights).sum(axis=1)
     ranking = results_df.sort_values("IFI", ascending=False)
-    ranking.to_excel("Paper/Results/model_ranking_otimizado.xlsx", index=False)
+    ranking.to_excel(RESULTS_DIR / "model_ranking_otimizado.xlsx", index=False)
 
     print("\n📊 Ranking IFI:")
     print(ranking[['Model', 'R2', 'RMSE', 'MAE', 'MAPE',
@@ -57,9 +59,7 @@ def compute_ifi(results_df):
     axes[1].set_title("Top 10 Models"); axes[1].grid(True, alpha=0.3)
     axes[1].legend(bbox_to_anchor=(1.05, 1), loc='upper left', fontsize=9)
     plt.tight_layout()
-    plt.savefig("Figuras_IFI/IFI_sensitivity_with_legend_otimizado.png",
-                dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/IFI_sensitivity_with_legend_otimizado.png",
+    plt.savefig(FIG_IFI / "IFI_sensitivity_with_legend_otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -72,9 +72,7 @@ def compute_ifi(results_df):
     plt.xlabel('R² weight (w)'); plt.ylabel('Models')
     plt.title('IFI Sensitivity Heatmap (Optimized)')
     plt.tight_layout()
-    plt.savefig("Figuras_IFI/IFI_sensitivity_heatmap_otimizado.png",
-                dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/IFI_sensitivity_heatmap_otimizado.png",
+    plt.savefig(FIG_IFI / "IFI_sensitivity_heatmap_otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -88,8 +86,7 @@ def compute_ifi(results_df):
         plt.text(bar.get_width() + 0.001, bar.get_y() + bar.get_height() / 2,
                  f'{ranking["IFI"].iloc[i]:.3f}', va='center')
     plt.tight_layout()
-    plt.savefig("Figures/IFI_Ranking_Otimizado.png",       dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/IFI_Ranking_Otimizado.png", dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_IFI / "IFI_Ranking_Otimizado.png", dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ IFI Sensitivity plots salvos")
 

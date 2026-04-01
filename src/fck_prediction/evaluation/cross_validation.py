@@ -9,7 +9,8 @@ from sklearn.metrics import (r2_score, mean_squared_error,
                              mean_absolute_percentage_error)
 
 from fck_prediction.config import (N_SPLITS_CV, N_REPEATS_CV, TARGET,
-                                    TRAINING_COLOR, TESTING_COLOR)
+                                    TRAINING_COLOR, TESTING_COLOR,
+                                    FIG_CROSS_VAL, RESULTS_DIR)
 
 
 def run_repeated_kfold(optimized_datasets, models, model_list,
@@ -77,9 +78,9 @@ def run_repeated_kfold(optimized_datasets, models, model_list,
 
     cv_summary_df = pd.DataFrame(cv_summary).sort_values('Mean_R2', ascending=False)
     repeated_cv_df.to_excel(
-        'Resultados_Artigo/Repeated_CV_Otimizado_10x10_Detailed.xlsx', index=False)
+        RESULTS_DIR / "Repeated_CV_Otimizado_10x10_Detailed.xlsx", index=False)
     cv_summary_df.to_excel(
-        'Resultados_Artigo/Repeated_CV_Otimizado_10x10_Summary.xlsx', index=False)
+        RESULTS_DIR / "Repeated_CV_Otimizado_10x10_Summary.xlsx", index=False)
 
     print("\n🏆 RANKING Repeated K-Fold CV:")
     print(cv_summary_df[['Model', 'Mean_R2', 'Std_R2',
@@ -104,9 +105,7 @@ def run_repeated_kfold(optimized_datasets, models, model_list,
     ax.grid(True, alpha=0.3, axis='y')
     ax.legend(loc='lower right')
     plt.tight_layout()
-    plt.savefig('Figuras_NestedCV/Repeated_CV_Boxplot_Otimizado.png',
-                dpi=300, bbox_inches='tight')
-    plt.savefig('Paper/Figures/Repeated_CV_Boxplot_Otimizado.png',
+    plt.savefig(FIG_CROSS_VAL / "Repeated_CV_Boxplot_Otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -119,9 +118,7 @@ def run_repeated_kfold(optimized_datasets, models, model_list,
         plt.title('Stability – Mean R² per Repeat', fontsize=14, fontweight='bold')
         plt.xlabel('Repeat'); plt.ylabel('Model')
         plt.tight_layout()
-        plt.savefig('Figuras_NestedCV/Repeated_CV_Stability_Heatmap_Otimizado.png',
-                    dpi=300, bbox_inches='tight')
-        plt.savefig('Paper/Figures/Repeated_CV_Stability_Heatmap_Otimizado.png',
+        plt.savefig(FIG_CROSS_VAL / "Repeated_CV_Stability_Heatmap_Otimizado.png",
                     dpi=300, bbox_inches='tight')
         plt.close()
 
@@ -144,9 +141,7 @@ def run_repeated_kfold(optimized_datasets, models, model_list,
                  f'({n_splits}-fold, {n_repeats} repeats)', fontsize=14, fontweight='bold')
     ax.grid(True, alpha=0.3, axis='y', linestyle='--')
     plt.tight_layout()
-    plt.savefig('Figuras_NestedCV/Repeated_CV_Barplot_with_CI_Otimizado.png',
-                dpi=300, bbox_inches='tight')
-    plt.savefig('Paper/Figures/Repeated_CV_Barplot_with_CI_Otimizado.png',
+    plt.savefig(FIG_CROSS_VAL / "Repeated_CV_Barplot_with_CI_Otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -161,9 +156,7 @@ def run_repeated_kfold(optimized_datasets, models, model_list,
     ax.tick_params(axis='x', rotation=45, labelsize=10)
     ax.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
-    plt.savefig('Figuras_NestedCV/Repeated_CV_Violin_Plot_Otimizado.png',
-                dpi=300, bbox_inches='tight')
-    plt.savefig('Paper/Figures/Repeated_CV_Violin_Plot_Otimizado.png',
+    plt.savefig(FIG_CROSS_VAL / "Repeated_CV_Violin_Plot_Otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
 
@@ -199,7 +192,7 @@ def run_repeated_kfold(optimized_datasets, models, model_list,
 
     cv_metrics_df = pd.DataFrame(cv_metrics)
     cv_metrics_df.to_excel(
-        'Resultados_Artigo/Repeated_CV_Train_Test_Metrics_Otimizado.xlsx', index=False)
+        RESULTS_DIR / "Repeated_CV_Train_Test_Metrics_Otimizado.xlsx", index=False)
 
     tc = '#2C3E50'; tc2 = '#E74C3C'
     fig, axes = plt.subplots(2, 2, figsize=(16, 12))
@@ -223,9 +216,7 @@ def run_repeated_kfold(optimized_datasets, models, model_list,
         if idx == 0: ax.legend(title='Dataset', loc='lower right')
         else:        ax.legend_.remove()
     plt.tight_layout()
-    plt.savefig('Figuras_NestedCV/Repeated_CV_All_Metrics_Boxplot_Otimizado.png',
-                dpi=300, bbox_inches='tight')
-    plt.savefig('Paper/Figures/Repeated_CV_All_Metrics_Boxplot_Otimizado.png',
+    plt.savefig(FIG_CROSS_VAL / "Repeated_CV_All_Metrics_Boxplot_Otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Gráficos Repeated K-Fold CV salvos")

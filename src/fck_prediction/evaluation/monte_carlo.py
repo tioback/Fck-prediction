@@ -10,7 +10,8 @@ from sklearn.metrics import (r2_score, mean_squared_error,
                              mean_absolute_percentage_error)
 
 from fck_prediction.config import (N_MONTE_CARLO, N_MC_OPT,
-                                    METRICS_LIST, METRIC_LABELS, TARGET)
+                                    METRICS_LIST, METRIC_LABELS, TARGET,
+                                    FIG_MONTE_CARLO, RESULTS_DIR)
 
 
 def run_monte_carlo(X_full, y_full, models, model_list, n_runs=N_MONTE_CARLO):
@@ -57,7 +58,7 @@ def run_monte_carlo(X_full, y_full, models, model_list, n_runs=N_MONTE_CARLO):
                 print(f"      ⚠️ {name}: {str(e)[:50]}")
 
     df_results = pd.DataFrame(all_results)
-    df_results.to_excel('Resultados_Artigo/Monte_Carlo_Results.xlsx', index=False)
+    df_results.to_excel(RESULTS_DIR / "Monte_Carlo_Results.xlsx", index=False)
 
     # Variance Ratio
     variance_ratio = []
@@ -74,7 +75,7 @@ def run_monte_carlo(X_full, y_full, models, model_list, n_runs=N_MONTE_CARLO):
                                     "Var_Test":  np.var(te_v)})
 
     df_vr = pd.DataFrame(variance_ratio)
-    df_vr.to_excel('Resultados_Artigo/Variance_Ratio_Results.xlsx', index=False)
+    df_vr.to_excel(RESULTS_DIR / "Variance_Ratio_Results.xlsx", index=False)
 
     # Boxplot
     fig, axes = plt.subplots(4, 1, figsize=(16, 18), sharex=True)
@@ -111,9 +112,7 @@ def run_monte_carlo(X_full, y_full, models, model_list, n_runs=N_MONTE_CARLO):
     plt.xticks(rotation=45, ha='right', fontsize=10)
     plt.xlabel('Model', fontsize=12)
     plt.tight_layout()
-    plt.savefig("Figuras_MonteCarlo/Benchmark_Boxplot_All_Metrics.png",
-                dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/Benchmark_Boxplot_All_Metrics.png",
+    plt.savefig(FIG_MONTE_CARLO / "Benchmark_Boxplot_All_Metrics.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Boxplot Monte Carlo (dados originais) salvo")
@@ -172,7 +171,7 @@ def run_monte_carlo_optimized(optimized_datasets, models, model_list,
 
     df_res_opt = pd.DataFrame(all_res_opt)
     df_res_opt.to_excel(
-        'Resultados_Artigo/Monte_Carlo_Results_Otimizado.xlsx', index=False)
+        RESULTS_DIR / "Monte_Carlo_Results_Otimizado.xlsx", index=False)
     print(f"✅ MC otimizado: {len(df_res_opt)} linhas")
 
     # Variance Ratio (otimizado)
@@ -194,7 +193,7 @@ def run_monte_carlo_optimized(optimized_datasets, models, model_list,
 
     df_vr_opt = pd.DataFrame(vr_opt)
     df_vr_opt.to_excel(
-        'Resultados_Artigo/Variance_Ratio_Results_Otimizado.xlsx', index=False)
+        RESULTS_DIR / "Variance_Ratio_Results_Otimizado.xlsx", index=False)
 
     # Boxplot MC otimizado
     fig, axes = plt.subplots(4, 1, figsize=(16, 18), sharex=True)
@@ -234,9 +233,7 @@ def run_monte_carlo_optimized(optimized_datasets, models, model_list,
     plt.xticks(rotation=45, ha='right', fontsize=10)
     plt.xlabel('Model', fontsize=12)
     plt.tight_layout()
-    plt.savefig("Figuras_MonteCarlo/Benchmark_Boxplot_All_Metrics_Otimizado.png",
-                dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/Benchmark_Boxplot_All_Metrics_Otimizado.png",
+    plt.savefig(FIG_MONTE_CARLO / "Benchmark_Boxplot_All_Metrics_Otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Boxplot MC otimizado salvo")

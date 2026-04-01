@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from scipy import stats
 
+from fck_prediction.config import FIG_QQ, RESULTS_DIR
+
 
 def run_normality_analysis(pred_ref, y_ref_ext, ranking):
     """Q-Q plots + residual normality tests on common reference partition [NEW-6] (S29).
@@ -95,11 +97,7 @@ def run_normality_analysis(pred_ref, y_ref_ext, ranking):
     for idx in range(pidx3, len(axes_flat_qq)):
         axes_flat_qq[idx].set_visible(False)
     plt.tight_layout()
-    for pth in ['Figuras_QQPlot/QQ_Plots_All_Models.png',
-                'Figuras_NestedCV/QQ_Plots_All_Models.png',
-                'Paper/Figures/QQ_Plots_All_Models.png',
-                'Figures/QQ_Plots_All_Models.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_QQ / 'QQ_Plots_All_Models.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("\n✅ Q-Q Plots (todos os modelos) salvo")
 
@@ -118,11 +116,7 @@ def run_normality_analysis(pred_ref, y_ref_ext, ranking):
                                    fontsize=11, fontweight='bold', color=col)
             axes_t3[idx].grid(True, alpha=0.3)
         plt.tight_layout()
-        for pth in ['Figuras_QQPlot/QQ_Plots_Top3_Models.png',
-                    'Figuras_NestedCV/QQ_Plots_Top3_Models.png',
-                    'Paper/Figures/QQ_Plots_Top3_Models.png',
-                    'Figures/QQ_Plots_Top3_Models.png']:
-            plt.savefig(pth, dpi=300, bbox_inches='tight')
+        plt.savefig(FIG_QQ / 'QQ_Plots_Top3_Models.png', dpi=300, bbox_inches='tight')
         plt.close()
         print("✅ Q-Q Plots (Top 3) salvo")
 
@@ -152,11 +146,7 @@ def run_normality_analysis(pred_ref, y_ref_ext, ranking):
     for idx in range(hidx + 1, len(ah_flat)):
         ah_flat[idx].set_visible(False)
     plt.tight_layout()
-    for pth in ['Figuras_QQPlot/Residuals_Histogram_With_Normal.png',
-                'Figuras_NestedCV/Residuals_Histogram_With_Normal.png',
-                'Paper/Figures/Residuals_Histogram_With_Normal.png',
-                'Figures/Residuals_Histogram_With_Normal.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_QQ / 'Residuals_Histogram_With_Normal.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Histogramas de resíduos salvos")
 
@@ -177,11 +167,7 @@ def run_normality_analysis(pred_ref, y_ref_ext, ranking):
     ax.tick_params(axis='x', rotation=45, labelsize=10)
     ax.grid(True, alpha=0.3, axis='y'); ax.legend()
     plt.tight_layout()
-    for pth in ['Figuras_QQPlot/Residuals_Boxplot.png',
-                'Figuras_NestedCV/Residuals_Boxplot.png',
-                'Paper/Figures/Residuals_Boxplot.png',
-                'Figures/Residuals_Boxplot.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_QQ / 'Residuals_Boxplot.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Boxplot dos resíduos salvo")
 
@@ -205,11 +191,7 @@ def run_normality_analysis(pred_ref, y_ref_ext, ranking):
                  fontsize=14, fontweight='bold')
     ax.legend(loc='upper right'); ax.grid(True, alpha=0.3, axis='y')
     plt.tight_layout()
-    for pth in ['Figuras_QQPlot/Normality_Test_Comparison.png',
-                'Figuras_NestedCV/Normality_Test_Comparison.png',
-                'Paper/Figures/Normality_Test_Comparison.png',
-                'Figures/Normality_Test_Comparison.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_QQ / 'Normality_Test_Comparison.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Comparação de normalidade salva")
 
@@ -217,8 +199,7 @@ def run_normality_analysis(pred_ref, y_ref_ext, ranking):
     norm_tbl = pd.DataFrame(normality_tests).round(
         {'Mean_Residual': 4, 'Std_Residual': 4, 'Skewness': 3, 'Kurtosis': 3,
          'Shapiro_Wilk': 4, 'Shapiro_p': 4, 'Jarque_Bera': 2, 'JB_p': 4})
-    norm_tbl.to_excel('Resultados_Artigo/Normality_Tests_Results.xlsx', index=False)
-    norm_tbl.to_excel('Paper/Results/Normality_Tests_Results.xlsx',    index=False)
+    norm_tbl.to_excel(RESULTS_DIR / 'Normality_Tests_Results.xlsx', index=False)
 
     print("\n📊 TESTES DE NORMALIDADE:")
     print(norm_tbl[['Model', 'Mean_Residual', 'Std_Residual', 'Skewness',
