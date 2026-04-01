@@ -45,6 +45,8 @@ from fck_prediction.inference.predictor import predict_new_mixes
 
 
 def main():
+    start_time = datetime.now()
+
     # ── S00 – Environment ────────────────────────────────────────────────────
     setup_environment()
 
@@ -216,8 +218,14 @@ def main():
     print("   figures/dm_heatmap/         – Diebold-Mariano heatmap")
     print("   figures/ifi/                – IFI sensitivity")
 
+    elapsed = datetime.now() - start_time
+    total_seconds = int(elapsed.total_seconds())
+    hours, remainder = divmod(total_seconds, 3600)
+    minutes, seconds = divmod(remainder, 60)
+
     print("\n" + "=" * 80)
     print(f"✅ PROCESSO v15 CONCLUÍDO EM {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"⏱  Tempo total: {hours:02d}:{minutes:02d}:{seconds:02d}")
     print("=" * 80)
 
 
