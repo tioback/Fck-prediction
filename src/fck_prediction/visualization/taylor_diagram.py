@@ -3,6 +3,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from sklearn.metrics import mean_squared_error
 
+from fck_prediction.config import FIG_TAYLOR, RESULTS_DIR
+
 
 def plot_taylor_diagram_initial(pred_ref, y_ref_ext):
     """First-pass Taylor Diagram — basic polar (S10).
@@ -63,8 +65,7 @@ def plot_taylor_diagram_initial(pred_ref, y_ref_ext):
         ax.grid(True, alpha=0.2)
         ax.legend(loc='upper right')
 
-    plt.savefig('Figuras_NestedCV/Taylor_Diagram.png', dpi=300, bbox_inches='tight')
-    plt.savefig('Paper/Figures/Taylor_Diagram.png',    dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_TAYLOR / 'Taylor_Diagram.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Taylor Diagram salvo")
 
@@ -75,8 +76,7 @@ def plot_taylor_diagram_initial(pred_ref, y_ref_ext):
         'RMSE': rmse_lst,
         'Bias': [np.mean(pred_ref[m] - y_ref_ext) for m in nm_lst],
     }).sort_values('Correlation', ascending=False)
-    taylor_stats.to_excel('Resultados_Artigo/Taylor_Diagram_Statistics.xlsx', index=False)
-    taylor_stats.to_excel('Paper/Results/Taylor_Diagram_Statistics.xlsx',    index=False)
+    taylor_stats.to_excel(RESULTS_DIR / 'Taylor_Diagram_Statistics.xlsx', index=False)
     print(taylor_stats.to_string(index=False))
 
     return taylor_stats
@@ -156,10 +156,7 @@ def plot_taylor_diagram(pred_ref, y_ref_ext):
                      fontsize=14, fontweight='bold')
         ax.grid(True, alpha=0.2); ax.legend(loc='upper right')
 
-    for pth in ['Figuras_NestedCV/Taylor_Diagram.png',
-                'Paper/Figures/Taylor_Diagram.png',
-                'Figures/Taylor_Diagram.png']:
-        plt.savefig(pth, dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_TAYLOR / 'Taylor_Diagram.png', dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Taylor Diagram salvo")
 
@@ -172,8 +169,7 @@ def plot_taylor_diagram(pred_ref, y_ref_ext):
         'Bias':               [np.mean(pred_ref[m] - y_ref_ext) for m in nm_td],
     }).sort_values('Correlation', ascending=False)
 
-    taylor_stats_td.to_excel('Resultados_Artigo/Taylor_Diagram_Statistics.xlsx', index=False)
-    taylor_stats_td.to_excel('Paper/Results/Taylor_Diagram_Statistics.xlsx',    index=False)
+    taylor_stats_td.to_excel(RESULTS_DIR / 'Taylor_Diagram_Statistics.xlsx', index=False)
     print("\nTAYLOR DIAGRAM – ESTATÍSTICAS:")
     print(taylor_stats_td.to_string(index=False))
 

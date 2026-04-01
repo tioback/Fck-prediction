@@ -2,6 +2,8 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
+from fck_prediction.config import FIG_RADAR, RESULTS_DIR
+
 
 def plot_radar(results_df, ranking):
     """Multi-metric radar chart — 3 versions [NEW-2] (S25).
@@ -42,7 +44,7 @@ def plot_radar(results_df, ranking):
     angles += angles[:1]
     colors_radar = plt.cm.tab10(np.linspace(0, 1, len(models_list_radar)))
 
-    def _radar_plot(fig_path_list, title, models_sel, colors_sel, idx_map, tick_labels=None):
+    def _radar_plot(fig_path, title, models_sel, colors_sel, idx_map, tick_labels=None):
         fig, ax = plt.subplots(figsize=(12, 10), subplot_kw={'projection': 'polar'})
         for cidx, model in enumerate(models_sel):
             midx = idx_map[model]
@@ -61,18 +63,14 @@ def plot_radar(results_df, ranking):
         plt.title(title, fontsize=14, fontweight='bold', pad=20)
         plt.legend(loc='upper right', bbox_to_anchor=(1.3, 1.0), fontsize=9)
         plt.tight_layout()
-        for pth in fig_path_list:
-            plt.savefig(pth, dpi=300, bbox_inches='tight')
+        plt.savefig(fig_path, dpi=300, bbox_inches='tight')
         plt.close()
 
     idx_map_all = {m: i for i, m in enumerate(models_list_radar)}
 
     # Versão 1 – todos os modelos, métricas normalizadas
     _radar_plot(
-        ['Figuras_Radar/Radar_Chart_Normalized.png',
-         'Figuras_NestedCV/Radar_Chart_Normalized.png',
-         'Paper/Figures/Radar_Chart_Normalized.png',
-         'Figures/Radar_Chart_Normalized.png'],
+        FIG_RADAR / 'Radar_Chart_Normalized.png',
         'Radar Chart – Multi-Metric Model Comparison (Optimized Datasets)\n'
         '(Higher score = better performance)',
         models_list_radar, colors_radar, idx_map_all)
@@ -82,10 +80,7 @@ def plot_radar(results_df, ranking):
     range_labels = [f"{rd['label']}\n[{rd['min']:.2f} – {rd['max']:.2f}]"
                     for rd in radar_data]
     _radar_plot(
-        ['Figuras_Radar/Radar_Chart_With_Ranges.png',
-         'Figuras_NestedCV/Radar_Chart_With_Ranges.png',
-         'Paper/Figures/Radar_Chart_With_Ranges.png',
-         'Figures/Radar_Chart_With_Ranges.png'],
+        FIG_RADAR / 'Radar_Chart_With_Ranges.png',
         'Radar Chart – Model Comparison with Metric Ranges\n'
         '(Higher score = better performance)',
         models_list_radar, colors_radar, idx_map_all, tick_labels=range_labels)
@@ -95,10 +90,7 @@ def plot_radar(results_df, ranking):
     top5_radar = ranking.head(5)['Model'].tolist()
     cols_top5  = plt.cm.viridis(np.linspace(0, 1, len(top5_radar)))
     _radar_plot(
-        ['Figuras_Radar/Radar_Chart_Top5_Models.png',
-         'Figuras_NestedCV/Radar_Chart_Top5_Models.png',
-         'Paper/Figures/Radar_Chart_Top5_Models.png',
-         'Figures/Radar_Chart_Top5_Models.png'],
+        FIG_RADAR / 'Radar_Chart_Top5_Models.png',
         'Radar Chart – Top 5 Models (IFI Ranking)\n(Higher score = better performance)',
         top5_radar, cols_top5, idx_map_all)
     print("✅ Radar Chart (Top 5) salvo")
@@ -113,10 +105,8 @@ def plot_radar(results_df, ranking):
     radar_ranking_df = radar_norm_df[['Model', 'Radar_Score']].sort_values(
         'Radar_Score', ascending=False)
 
-    radar_norm_df.to_excel('Resultados_Artigo/Radar_Chart_Normalized_Data.xlsx', index=False)
-    radar_norm_df.to_excel('Paper/Results/Radar_Chart_Normalized_Data.xlsx',    index=False)
-    radar_ranking_df.to_excel('Resultados_Artigo/Radar_Chart_Ranking.xlsx', index=False)
-    radar_ranking_df.to_excel('Paper/Results/Radar_Chart_Ranking.xlsx',    index=False)
+    radar_norm_df.to_excel(RESULTS_DIR / 'Radar_Chart_Normalized_Data.xlsx', index=False)
+    radar_ranking_df.to_excel(RESULTS_DIR / 'Radar_Chart_Ranking.xlsx', index=False)
 
     print("\n📊 RANKING POR SCORE MÉDIO RADAR:")
     print(radar_ranking_df.to_string(index=False))

@@ -2,6 +2,8 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+from fck_prediction.config import FIG_CORRELATION
+
 
 def plot_model_correlation(pred_ref):
     """Pearson correlation heatmap of model predictions on the common test set (S13)."""
@@ -16,9 +18,7 @@ def plot_model_correlation(pred_ref):
     plt.title('Pearson Correlation – Model Predictions (Common Test Set)',
               fontsize=14)
     plt.tight_layout()
-    plt.savefig('Figuras_Correlacao/Correlacao_Performance_Modelos_Otimizado.png',
-                dpi=300, bbox_inches='tight')
-    plt.savefig('Paper/Figures/Correlacao_Performance_Modelos_Otimizado.png',
+    plt.savefig(FIG_CORRELATION / 'Correlacao_Performance_Modelos_Otimizado.png',
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Heatmap de correlação salvo")

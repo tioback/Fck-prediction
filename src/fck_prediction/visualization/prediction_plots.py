@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from sklearn.metrics import r2_score, mean_squared_error
 
+from fck_prediction.config import FIG_PREDICTION
+
 
 def plot_predictions(pred_ref, y_ref_ext):
     """Parity plots, residual plots, KDE density and MAPE scatter (S16).
@@ -29,8 +31,8 @@ def plot_predictions(pred_ref, y_ref_ext):
         plt.legend(loc='upper left'); plt.grid(True, linestyle=':', alpha=0.5)
         plt.xlim(lims); plt.ylim(lims)
         plt.tight_layout()
-        fn = f"Paper/Figures/Validacao_Externa/Scatter_{name.replace(' ', '_')}.png"
-        plt.savefig(fn, dpi=300, bbox_inches='tight')
+        plt.savefig(FIG_PREDICTION / f"Scatter_{name.replace(' ', '_')}.png",
+                    dpi=300, bbox_inches='tight')
         plt.close()
         print(f"   ✅ {name}")
     print("✅ Parity plots gerados")
@@ -48,7 +50,7 @@ def plot_predictions(pred_ref, y_ref_ext):
         plt.ylabel("Residuals (MPa)",            fontsize=10)
         plt.grid(True, linestyle=':', alpha=0.6)
         plt.tight_layout()
-        plt.savefig(f"Paper/Figures/Residuos/Residuals_{name.replace(' ', '_')}.png",
+        plt.savefig(FIG_PREDICTION / f"Residuals_{name.replace(' ', '_')}.png",
                     dpi=300, bbox_inches='tight')
         plt.close()
     print("✅ Residual plots salvos")
@@ -69,7 +71,7 @@ def plot_predictions(pred_ref, y_ref_ext):
             plt.grid(True, linestyle=':', alpha=0.4)
             plt.legend()
             plt.tight_layout()
-            plt.savefig(f"Paper/Figures/KDE_Density/KDE_{name.replace(' ', '_')}.png",
+            plt.savefig(FIG_PREDICTION / f"KDE_{name.replace(' ', '_')}.png",
                         dpi=300, bbox_inches='tight')
         except Exception as e:
             print(f"   ⚠️ KDE {name}: {e}")
@@ -85,7 +87,7 @@ def plot_predictions(pred_ref, y_ref_ext):
         plt.xlabel("fck (MPa)"); plt.ylabel("MAPE (%)")
         plt.title(f"MAPE vs fck – {name}")
         plt.tight_layout()
-        plt.savefig(f"Figures/MAPE_vs_fck_{name}_Otimizado.png",
+        plt.savefig(FIG_PREDICTION / f"MAPE_vs_fck_{name}_Otimizado.png",
                     dpi=300, bbox_inches='tight')
         plt.close()
     print("✅ MAPE plots salvos")

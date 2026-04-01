@@ -3,7 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-from fck_prediction.config import TRAINING_COLOR, TESTING_COLOR
+from fck_prediction.config import TRAINING_COLOR, TESTING_COLOR, FIG_PERFORMANCE
 
 
 def plot_performance_metrics(train_metrics, error_variance):
@@ -56,8 +56,7 @@ def plot_performance_metrics(train_metrics, error_variance):
                        plt.Rectangle((0, 0), 1, 1, facecolor=TESTING_COLOR)],
                       ['Training', 'Testing'], loc='upper right')
     plt.tight_layout()
-    plt.savefig("Figures/Boxplots_All_Metrics_Otimizado.png",       dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/Boxplots_All_Metrics_Otimizado.png", dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_PERFORMANCE / "Boxplots_All_Metrics_Otimizado.png", dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Boxplots completos salvos")
 
@@ -82,8 +81,7 @@ def plot_performance_metrics(train_metrics, error_variance):
                plt.Rectangle((0, 0), 1, 1, facecolor=TESTING_COLOR)],
               ['Training', 'Testing'], loc='upper right')
     plt.tight_layout()
-    plt.savefig("Figures/Error_Variance_Boxplot_Otimizado.png",       dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/Error_Variance_Boxplot_Otimizado.png", dpi=300, bbox_inches='tight')
+    plt.savefig(FIG_PERFORMANCE / "Error_Variance_Boxplot_Otimizado.png", dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Error Variance salvo")
 
@@ -113,9 +111,7 @@ def plot_performance_metrics(train_metrics, error_variance):
         if idx == 0: ax.legend(title='Dataset')
         else:        ax.legend_.remove()
     plt.tight_layout()
-    plt.savefig("Figuras_Violin/Violin_Plots_All_Metrics_Otimizado.png",
-                dpi=300, bbox_inches='tight')
-    plt.savefig("Paper/Figures/Violin_Plots_All_Metrics_Otimizado.png",
+    plt.savefig(FIG_PERFORMANCE / "Violin_Plots_All_Metrics_Otimizado.png",
                 dpi=300, bbox_inches='tight')
     plt.close()
     print("✅ Violin plots salvos")
